@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "components/product_card.html" import card %}
+{% block title %}Shop – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap">
+  <h2>Shop</h2>
+  <div class="filters">
+    <a class="chip {{ 'on' if not current }}" href="{{ url_for('shop.index', sort=sort) }}">All</a>
+    {% for c in categories %}
+    <a class="chip {{ 'on' if current == c.slug }}" href="{{ url_for('shop.index', category=c.slug, sort=sort) }}">{{ c.name }}</a>
+    {% endfor %}
+    <form method="get" class="sortform">
+      {% if current %}<input type="hidden" name="category" value="{{ current }}">{% endif %}
+      <select name="sort" onchange="this.form.submit()" aria-label="Sort">
+        <option value="newest" {{ 'selected' if sort == 'newest' }}>Newest</option>
+        <option value="price_low" {{ 'selected' if sort == 'price_low' }}>Price: low to high</option>
+        <option value="price_high" {{ 'selected' if sort == 'price_high' }}>Price: high to low</option>
+      </select>
+    </form>
+  </div>
+  {% if products %}
+  <div class="grid">{% for p in products %}{{ card(p) }}{% endfor %}</div>
+  {% else %}
+  <p class="muted">No products here yet. Check back soon.</p>
+  {% endif %}
+</div></section></main>
+{% endblock %}
+{% block scripts %}{% include "components/order_modal.html" %}{% endblock %}

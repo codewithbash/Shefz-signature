@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<main><section><div class="wrap" style="text-align:center">
+  <h2>Page not found</h2>
+  <p class="muted">That page does not exist or is not ready yet.</p>
+  <a class="btn gold" href="{{ url_for('main.home') }}">Back to home</a>
+</div></section></main>
+{% endblock %}

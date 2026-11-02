@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "components/badges.html" import order_badge, pay_badge %}
+{% block title %}{{ order.order_number }} – Admin{% endblock %}
+{% block content %}
+<main><section><div class="wrap" style="max-width:900px">
+  <h2>Order {{ order.order_number }}</h2>
+  {% include "admin/_nav.html" %}
+  <p>{{ order_badge(order) }} {{ pay_badge(order) }} <span class="muted small">Placed {{ order.created_at.strftime('%d %b %Y, %H:%M') }}{% if order.paid_at %} · Paid {{ order.paid_at.strftime('%d %b %Y, %H:%M') }}{% endif %}</span></p>
+
+  <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+    <div class="panel" style="margin:0">
+      <h3 style="font-size:22px;margin-bottom:8px">Payment</h3>
+      <form class="inline" method="post" action="{{ url_for('admin.set_payment_status', order_id=order.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <select name="payment_status" aria-label="Payment status">
+          {% for v, l in payments %}<option value="{{ v }}" {{ 'selected' if v == order.payment_status }}>{{ l }}</option>{% endfor %}
+        </select>
+        <button class="btn gold full" type="submit" style="margin-top:10px">Save payment</button>
+      </form>
+      <p class="hint">Marking paid also moves a new order to Confirmed.</p>
+    </div>
+    <div class="panel" style="margin:0">
+      <h3 style="font-size:22px;margin-bottom:8px">Order status</h3>
+      <form class="inline" method="post" action="{{ url_for('admin.set_order_status', order_id=order.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <select name="status" aria-label="Order status">
+          {% for v, l in statuses %}<option value="{{ v }}" {{ 'selected' if v == order.status }}>{{ l }}</option>{% endfor %}
+        </select>
+        <button class="btn gold full" type="submit" style="margin-top:10px">Save status</button>
+      </form>
+      <p class="hint">Cancelling puts ready-made stock back. A cancelled order cannot be reopened.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3 style="font-size:24px;margin-bottom:8px">Items to make</h3>
+    {% for i in order.items %}
+    <div class="sumrow"><span><b>{{ i.quantity }} × {{ i.product_name }}</b><br>
+      <small class="muted">{% if i.size %}Size {{ i.size }}{% endif %}{% if i.size and i.colour %} · {% endif %}{{ i.colour or '' }}<br>{{ i.making_label }}</small></span>
+      <span>{{ i.line_total|naira }}</span></div>
+    {% endfor %}
+    <div class="sumrow"><span class="muted">Items</span><span>{{ order.subtotal|naira }}</span></div>
+    {% if order.express_total %}<div class="sumrow"><span class="muted">Express fees</span><span>{{ order.express_total|naira }}</span></div>{% endif %}
+    <div class="total"><span>Total</span><b>{{ order.total|naira }}</b></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="font-size:24px;margin-bottom:8px">Customer and delivery</h3>
+    <p style="margin:0">{{ order.customer_name }} · <a class="gl" href="https://wa.me/{{ order.phone|replace(' ', '')|replace('+', '') }}" target="_blank" rel="noopener">{{ order.phone }}</a><br>
+    {{ order.delivery_address }}<br>{{ order.city }}<br><span class="muted small">Account: {{ order.user.email }}</span></p>
+    {% if order.notes %}<p class="muted">Note: {{ order.notes }}</p>{% endif %}
+  </div>
+</div></section></main>
+{% endblock %}

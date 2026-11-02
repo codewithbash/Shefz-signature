@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}{{ 'Edit' if product else 'Add' }} product – Admin{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow" style="max-width:720px">
+  <h2>{{ 'Edit ' ~ product.name if product else 'Add a product' }}</h2>
+  {% include "admin/_nav.html" %}
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.name) }}{{ field(form.category_id) }}{{ field(form.description) }}{{ field(form.price) }}
+    {{ field(form.availability_type) }}
+    <div id="mto">
+      {{ field(form.production_days) }}
+      <div class="field">{{ form.express_available }} {{ form.express_available.label }}</div>
+      <div id="xp">{{ field(form.express_days) }}{{ field(form.express_fee) }}</div>
+    </div>
+    <div id="rm">{{ field(form.stock_quantity) }}</div>
+    {{ field(form.stock_status) }}{{ field(form.sizes) }}{{ field(form.colours) }}
+    <div class="field">{{ form.is_featured }} {{ form.is_featured.label }}</div>
+    <div class="field">{{ form.is_active }} {{ form.is_active.label }}</div>
+    <div class="field">
+      <label for="images">Add photos (JPG, PNG or WEBP, you can pick several)</label>
+      <input class="input" type="file" id="images" name="images" accept="image/jpeg,image/png,image/webp" multiple>
+    </div>
+    {{ form.submit(class_="btn gold full") }}
+  </form>
+
+  {% if product and product.images %}
+  <h3 style="margin-top:36px">Photos</h3>
+  <div class="imggrid">
+    {% for img in product.images %}
+    <div class="imgcard">
+      <img src="{{ url_for('static', filename=img.image_path) }}" alt="{{ img.alt_text }}">
+      {% if img.is_primary %}<span class="tag">Main photo</span>{% endif %}
+      <div class="row">
+        {% if not img.is_primary %}
+        <form method="post" action="{{ url_for('admin.make_primary', image_id=img.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="chip" type="submit">Make main</button></form>{% endif %}
+        <form method="post" action="{{ url_for('admin.delete_image', image_id=img.id) }}" onsubmit="return confirm('Delete this photo?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="chip" type="submit">Delete</button></form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div></section></main>
+{% endblock %}
+{% block scripts %}
+<script>
+(function(){
+ var type=document.getElementById('availability_type'),mto=document.getElementById('mto'),
+     rm=document.getElementById('rm'),ex=document.getElementById('express_available'),xp=document.getElementById('xp');
+ function sync(){var m=type.value==='made_to_order';mto.style.display=m?'block':'none';rm.style.display=m?'none':'block';xp.style.display=(m&&ex.checked)?'block':'none'}
+ type.addEventListener('change',sync);ex.addEventListener('change',sync);sync();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}Choose a new password – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow">
+  <h2>Choose a new password</h2>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.password) }}{{ field(form.confirm) }}
+    {{ form.submit(class_="btn gold full") }}
+  </form>
+</div></section></main>
+{% endblock %}

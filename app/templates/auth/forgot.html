@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}Forgot password – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow">
+  <h2>Forgot your password?</h2>
+  <p class="muted">Enter your account email and we will send you a link to choose a new one.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.email) }}
+    {{ form.submit(class_="btn gold full") }}
+  </form>
+  <p class="muted"><a class="gl" href="{{ url_for('auth.login') }}">Back to log in</a></p>
+</div></section></main>
+{% endblock %}

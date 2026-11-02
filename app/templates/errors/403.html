@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<main><section><div class="wrap" style="text-align:center">
+  <h2>Not allowed</h2>
+  <p class="muted">You do not have permission to open this page.</p>
+  <a class="btn gold" href="{{ url_for('main.home') }}">Back to home</a>
+</div></section></main>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}Checkout – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap" style="max-width:820px">
+  <h2>Checkout</h2>
+  <div class="checkgrid">
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      {{ field(form.customer_name) }}{{ field(form.phone) }}{{ field(form.delivery_address) }}{{ field(form.city) }}{{ field(form.notes) }}
+      <div class="field">{{ form.save_details }} {{ form.save_details.label }}</div>
+      {{ form.submit(class_="btn gold full") }}
+      <p class="hint">After you place the order you will see the bank details to pay into.</p>
+    </form>
+    <aside class="panel" style="margin-top:14px">
+      <h3 style="font-size:24px;margin-bottom:10px">Your order</h3>
+      {% for l in cart.lines %}
+      <div class="sumrow"><span>{{ l.qty }} × {{ l.product.name }}{% if l.making == 'express' %} (express){% endif %}<br><small class="muted">{{ l.size }}{% if l.size and l.colour %}, {% endif %}{{ l.colour }}</small></span><span>{{ l.line_total|naira }}</span></div>
+      {% endfor %}
+      <div class="total"><span>Total</span><b>{{ cart.total|naira }}</b></div>
+      <a class="gl small" href="{{ url_for('cart.view') }}">Change cart</a>
+    </aside>
+  </div>
+</div></section></main>
+{% endblock %}

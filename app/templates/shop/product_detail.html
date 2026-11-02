@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "components/order_button.html" import order_button %}
+{% block title %}{{ p.name }} – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap detail">
+  <div>
+    {% if p.primary_image %}
+    <img class="ph" style="width:100%;border-radius:16px;object-fit:cover" src="{{ url_for('static', filename=p.primary_image) }}" alt="{{ p.name }}">
+    {% else %}<div class="ph" style="border-radius:16px">Product photo</div>{% endif %}
+  </div>
+  <div>
+    <a class="muted" href="{{ url_for('shop.index', category=p.category.slug) }}">{{ p.category.name }}</a>
+    <h2>{{ p.name }}</h2>
+    <div class="price" style="font-size:24px">{{ p.price|naira }}</div>
+    <p><span class="tag">{{ p.availability_label }}</span></p>
+    <p class="muted">{{ p.description }}</p>
+    {% if p.size_list %}<p><b>Sizes:</b> {{ p.size_list|join(", ") }}</p>{% endif %}
+    {% if p.colour_list %}<p><b>Colours:</b> {{ p.colour_list|join(", ") }}</p>{% endif %}
+    {% if p.availability_type == 'made_to_order' and p.express_available %}
+    <p class="muted">Express making: ready in {{ p.express_days }} days for an extra {{ p.express_fee|naira }}.</p>
+    {% endif %}
+    {{ order_button(p) }}
+    <p class="hint">Add to cart, then check out. Payment is by bank transfer.</p>
+  </div>
+</div></section></main>
+{% endblock %}
+{% block scripts %}{% include "components/order_modal.html" %}{% endblock %}

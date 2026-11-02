@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}Settings – Admin{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow" style="max-width:620px">
+  <h2>Settings</h2>
+  {% include "admin/_nav.html" %}
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <h3 style="font-size:24px;margin-top:22px">Bank details</h3>
+    <p class="muted small" style="margin:0">Shown to the customer after they place an order.</p>
+    {{ field(form.bank_name) }}{{ field(form.account_number) }}{{ field(form.account_name) }}{{ field(form.payment_note) }}
+    <h3 style="font-size:24px;margin-top:30px">Contact and alerts</h3>
+    {{ field(form.whatsapp_number) }}{{ field(form.notification_email) }}
+    <h3 style="font-size:24px;margin-top:30px">Social media</h3>
+    <p class="muted small" style="margin:0">Leave a box empty to hide that link from the website footer.</p>
+    {{ field(form.instagram_url) }}{{ field(form.tiktok_url) }}{{ field(form.facebook_url) }}{{ field(form.x_url) }}
+    {{ form.submit(class_="btn gold full") }}
+  </form>
+</div></section></main>
+{% endblock %}

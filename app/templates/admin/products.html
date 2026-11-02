@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Products – Admin{% endblock %}
+{% block content %}
+<main><section><div class="wrap">
+  <h2>Products</h2>
+  {% include "admin/_nav.html" %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Photo</th><th>Name</th><th>Price</th><th>How it is sold</th><th>Status</th><th>Shop</th><th></th></tr></thead>
+    <tbody>
+    {% for p in products %}
+    <tr>
+      <td>{% if p.primary_image %}<img class="thumb" src="{{ url_for('static', filename=p.primary_image) }}" alt="">{% else %}<div class="thumb"></div>{% endif %}</td>
+      <td>{{ p.name }}<br><small class="muted">{{ p.category.name }}</small></td>
+      <td>{{ p.price|naira }}</td>
+      <td>{{ p.availability_label }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin.set_status', product_id=p.id) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <select name="stock_status" onchange="this.form.submit()" aria-label="Status for {{ p.name }}">
+            {% for v, l in [('available','Available'),('sold_out','Sold out'),('unavailable','Unavailable')] %}
+            <option value="{{ v }}" {{ 'selected' if p.stock_status == v }}>{{ l }}</option>{% endfor %}
+          </select>
+        </form>
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('admin.toggle_active', product_id=p.id) }}" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="chip" type="submit">{{ 'Visible' if p.is_active else 'Hidden' }}</button>
+        </form>
+      </td>
+      <td><a class="gl" href="{{ url_for('admin.edit_product', product_id=p.id) }}">Edit</a></td>
+    </tr>
+    {% else %}<tr><td colspan="7" class="muted">No products yet.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div></section></main>
+{% endblock %}

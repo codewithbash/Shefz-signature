@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "components/badges.html" import order_badge, pay_badge %}
+{% block title %}My orders – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap" style="max-width:820px">
+  <h2>My orders</h2>
+  {% for o in orders %}
+  <a class="panel orderrow" href="{{ url_for('orders.detail', order_number=o.order_number) }}">
+    <div><b>{{ o.order_number }}</b><br><span class="muted small">{{ o.created_at.strftime('%d %b %Y') }} · {{ o.items|length }} item{{ 's' if o.items|length != 1 }}</span></div>
+    <div style="text-align:right">{{ o.total|naira }}<br>{{ order_badge(o) }} {{ pay_badge(o) }}</div>
+  </a>
+  {% else %}
+  <div class="panel"><p class="muted" style="margin:0 0 14px">You have not placed an order yet.</p>
+  <a class="btn gold" href="{{ url_for('shop.index') }}">Browse the collection</a></div>
+  {% endfor %}
+</div></section></main>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "components/product_card.html" import card %}
+{% block content %}
+<main>
+<section class="hero">
+ <div class="hero-box">
+  <div class="hero-copy">
+   <h1>Luxury for<br>Luxury People.</h1>
+   <p>Premium leather footwear, bags and belts, handmade to order in Lagos for those who stand out.</p>
+   <div class="cta-row">
+    <a class="btn gold" href="{{ url_for('shop.index') }}">Explore the collection</a>
+    <a class="btn ghost" href="https://wa.me/{{ wa_number }}">Order on WhatsApp</a>
+   </div>
+   <div class="trust"><span>Made to order</span><span>Delivery across Nigeria</span><span>Pay by bank transfer</span></div>
+  </div>
+ </div>
+</section>
+
+<section id="shop">
+ <div class="wrap">
+  <h2>Shop by category</h2>
+  <div class="cats">
+   <a class="cat" href="{{ url_for('shop.index', category='footwear') }}"><div><h3>Footwear</h3><p>Loafers, sandals, heels</p></div></a>
+   <a class="cat" href="{{ url_for('shop.index', category='bags') }}"><div><h3>Bags</h3><p>Totes, clutches, travel</p></div></a>
+   <a class="cat" href="{{ url_for('shop.index', category='belts') }}"><div><h3>Belts</h3><p>Everyday and occasion</p></div></a>
+  </div>
+ </div>
+</section>
+
+<section style="padding-top:8px">
+ <div class="wrap">
+  <div class="head">
+   <h2 style="margin:0">Featured pieces</h2>
+   <a class="muted" href="{{ url_for('shop.index') }}">View all</a>
+  </div>
+  <div class="grid">{% for p in featured %}{{ card(p) }}{% else %}<p class="muted">Products will appear here soon.</p>{% endfor %}</div>
+ </div>
+</section>
+
+<section class="steps" id="how">
+ <div class="wrap">
+  <h2>How your order works</h2>
+  <p class="muted" style="margin:0">Every piece is made after you order, so it fits you.</p>
+  <ol class="step-list">
+   <li><div><b>Choose your design</b><span class="muted">Pick the piece, size and colour.</span></div></li>
+   <li><div><b>Confirm on WhatsApp</b><span class="muted">We check the details and agree on delivery and payment.</span></div></li>
+   <li><div><b>We craft and deliver</b><span class="muted">You get updates until it reaches you.</span></div></li>
+  </ol>
+ </div>
+</section>
+
+<section>
+ <div class="wrap">
+  <div class="cream">
+   <h2>Your style. Your signature.</h2>
+   <p>Pick a design, choose your size, and send your order. We confirm it with you on WhatsApp.</p>
+   <ul><li>Every piece is made to order</li><li>Pay by bank transfer</li><li>Delivery arranged for your location</li></ul>
+   <a class="btn" href="#shop">Place your order</a>
+  </div>
+ </div>
+</section>
+</main>
+{% endblock %}
+{% block scripts %}{% include "components/order_modal.html" %}{% endblock %}

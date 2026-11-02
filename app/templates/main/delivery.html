@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Delivery – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap" style="max-width:760px">
+  <h2>Delivery</h2>
+  <p class="muted">We deliver across Nigeria.</p>
+  <div class="panel">
+    <h3 style="font-size:24px;margin-bottom:6px">How delivery works</h3>
+    <ul class="plain">
+      <li>Place your order and pay by bank transfer.</li>
+      <li>Your piece is made (made-to-order items) or prepared (ready-made items).</li>
+      <li>We message you on WhatsApp to agree the delivery cost and time for your location.</li>
+      <li>We send it to you and keep you updated.</li>
+    </ul>
+  </div>
+  <div class="panel">
+    <h3 style="font-size:24px;margin-bottom:6px">Delivery cost</h3>
+    <p style="margin:0">The cost depends on where you are, so we agree it with you on WhatsApp after you order. It is not included in the price shown on the website.</p>
+  </div>
+  <p><a class="btn gold" href="https://wa.me/{{ wa_number }}" target="_blank" rel="noopener">Ask about delivery on WhatsApp</a></p>
+</div></section></main>
+{% endblock %}

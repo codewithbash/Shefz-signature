@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}Edit my details – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow">
+  <h2>My details</h2>
+  <p class="muted">Your delivery details are filled in for you at checkout.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.full_name) }}{{ field(form.phone) }}
+    {{ field(form.address) }}{{ field(form.city) }}
+    {{ form.submit(class_="btn gold full") }}
+  </form>
+  <p class="muted"><a class="gl" href="{{ url_for('auth.account') }}">Back to my account</a></p>
+</div></section></main>
+{% endblock %}

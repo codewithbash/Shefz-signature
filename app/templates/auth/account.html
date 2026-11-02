@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "components/badges.html" import order_badge, pay_badge %}
+{% block title %}My account – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow">
+  <h2>Hello, {{ current_user.full_name.split()[0] }}</h2>
+  <p class="muted">{{ current_user.email }} · {{ current_user.phone }}</p>
+  <div class="panel"><h3 style="font-size:24px;margin-bottom:10px">My details</h3>
+    {% set sa = current_user.saved_address %}
+    <p style="margin:0">{{ current_user.full_name }} · {{ current_user.phone }}<br>
+    {% if sa %}{{ sa.address }}<br>{{ sa.city }}{% else %}<span class="muted">No delivery address saved yet.</span>{% endif %}</p>
+    <p style="margin:12px 0 0"><a class="gl" href="{{ url_for('auth.edit_account') }}">Edit my details</a></p></div>
+  <div class="panel"><h3 style="font-size:24px;margin-bottom:10px">My orders</h3>
+  {% for o in current_user.orders|sort(attribute='created_at', reverse=true) %}{% if loop.index <= 3 %}
+  <a class="orderrow" href="{{ url_for('orders.detail', order_number=o.order_number) }}">
+    <span><b>{{ o.order_number }}</b> <span class="muted small">{{ o.total|naira }}</span></span>
+    <span>{{ order_badge(o) }} {{ pay_badge(o) }}</span>
+  </a>{% endif %}
+  {% else %}<p class="muted" style="margin:0">No orders yet.</p>{% endfor %}
+  <p style="margin:12px 0 0"><a class="gl" href="{{ url_for('orders.history') }}">View all orders</a></p></div>
+  {% if current_user.role == 'admin' %}<p><a class="btn ghost" href="{{ url_for('admin.dashboard') }}">Open admin</a></p>{% endif %}
+</div></section></main>
+{% endblock %}

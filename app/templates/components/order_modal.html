@@ -1,0 +1,57 @@
+<dialog id="om" aria-labelledby="om-title">
+ <button class="close" type="button" id="om-x" aria-label="Close">×</button>
+ <form method="post" action="{{ url_for('cart.add') }}">
+ <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+ <input type="hidden" name="product_id" id="om-id">
+ <h3 id="om-title"></h3>
+ <div class="muted" id="om-base"></div>
+ <label class="f" id="om-size-wrap">Size<select id="om-size" name="size"></select></label>
+ <label class="f" id="om-col-wrap">Colour<select id="om-col" name="colour"></select></label>
+ <label class="f">Quantity<select id="om-qty" name="qty"></select></label>
+ <div id="om-speed">
+ <label class="f" style="margin-bottom:0">How fast do you need it?</label>
+ <label class="opt"><span><input type="radio" name="making" value="standard" checked> Standard making<small id="om-sd"></small></span><span>Included</span></label>
+ <label class="opt" id="om-xrow"><span><input type="radio" name="making" value="express"> Express making<small id="om-xd"></small></span><span id="om-xf"></span></label>
+ </div>
+ <div class="total"><span>Total</span><b id="om-total"></b></div>
+ <button class="btn gold full" type="submit" style="margin-top:0">Add to cart</button>
+ <p class="hint">You choose how to pay at checkout. Making starts after your payment is confirmed.</p>
+ </form>
+</dialog>
+<script>
+(function(){
+ var dlg=document.getElementById('om'),cur=null;
+ var $=function(i){return document.getElementById(i)};
+ var naira=function(n){return '₦'+n.toLocaleString('en-NG')};
+ function fill(sel,list){sel.innerHTML='';list.split(',').forEach(function(v){v=v.trim();if(!v)return;var o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o)})}
+ function express(){var r=document.querySelector('input[name=making]:checked');return r&&r.value==='express'}
+ function update(){
+  var p=+cur.dataset.price,f=+cur.dataset.fee||0,q=+$('om-qty').value||1;
+  $('om-total').textContent=naira((p+(express()?f:0))*q);
+ }
+ document.querySelectorAll('.order:not([disabled])').forEach(function(b){
+  b.addEventListener('click',function(){
+   cur=b;var d=b.dataset;
+   $('om-id').value=d.id;
+   $('om-title').textContent=d.name;
+   $('om-base').textContent='Price '+naira(+d.price);
+   fill($('om-size'),d.sizes);fill($('om-col'),d.colours);
+   $('om-size-wrap').style.display=d.sizes?'block':'none';
+   $('om-col-wrap').style.display=d.colours?'block':'none';
+   var max=+d.max||10;$('om-qty').innerHTML='';
+   for(var i=1;i<=max;i++){var o=document.createElement('option');o.value=i;o.textContent=i;$('om-qty').appendChild(o)}
+   var made=d.days!=='';
+   $('om-speed').style.display=made?'block':'none';
+   $('om-sd').textContent=made?'Ready in '+d.days+' days after payment':'';
+   $('om-xd').textContent=d.xdays?'Ready in '+d.xdays+' days after payment':'';
+   $('om-xf').textContent=d.fee?'+'+naira(+d.fee):'';
+   $('om-xrow').style.display=(made&&d.fee)?'flex':'none';
+   document.querySelector('input[name=making][value=standard]').checked=true;
+   update();dlg.showModal();
+  });
+ });
+ dlg.addEventListener('change',update);
+ $('om-x').addEventListener('click',function(){dlg.close()});
+ dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
+})();
+</script>

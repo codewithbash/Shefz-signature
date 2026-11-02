@@ -1,0 +1,14 @@
+from functools import wraps
+from flask import abort
+from flask_login import current_user, login_required
+
+
+def admin_required(view):
+    """Logged in AND role == 'admin'. Hiding a link is not security; this is."""
+    @wraps(view)
+    @login_required
+    def wrapped(*args, **kwargs):
+        if current_user.role != "admin":
+            abort(403)
+        return view(*args, **kwargs)
+    return wrapped

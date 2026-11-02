@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "components/form_field.html" import field %}
+{% block title %}Create account – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap narrow">
+  <h2>Create your account</h2>
+  <p class="muted">Track your orders and save your delivery details.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.full_name) }}{{ field(form.email) }}{{ field(form.phone) }}
+    {{ field(form.password) }}{{ field(form.confirm) }}
+    {{ form.submit(class_="btn gold full") }}
+  </form>
+  <p class="muted">Already registered? <a class="gl" href="{{ url_for('auth.login') }}">Log in</a></p>
+</div></section></main>
+{% endblock %}

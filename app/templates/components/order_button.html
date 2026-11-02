@@ -1,0 +1,11 @@
+{% macro order_button(p, extra="") %}
+{% if p.can_order %}
+<button class="btn gold order {{ extra }}" type="button" data-id="{{ p.id }}" data-name="{{ p.name }}" data-price="{{ p.price|int }}"
+  data-days="{{ p.production_days if p.availability_type == 'made_to_order' else '' }}"
+  data-xdays="{{ p.express_days or '' }}" data-fee="{{ (p.express_fee|int) if p.express_available else '' }}"
+  data-sizes="{{ p.sizes or '' }}" data-colours="{{ p.colours or '' }}"
+  data-max="{{ [10, p.stock_quantity]|min if (p.availability_type == 'ready_made' and p.stock_quantity is not none) else 10 }}">Add to cart</button>
+{% else %}
+<button class="btn ghost order" type="button" disabled style="opacity:.5;cursor:not-allowed">{{ p.availability_label }}</button>
+{% endif %}
+{% endmacro %}

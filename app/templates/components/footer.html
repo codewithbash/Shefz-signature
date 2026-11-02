@@ -1,0 +1,23 @@
+<footer id="contact">
+ <div class="wrap">
+  <div class="fgrid">
+   <div><h4>SHEFz Signature</h4><p class="muted" style="margin:0;max-width:34ch">Luxury for Luxury People. Shoes, bags and belts, made to order in Lagos.</p></div>
+   <div><h4>Shop</h4><ul>
+     <li><a href="{{ url_for('shop.index', category='footwear') }}">Footwear</a></li>
+     <li><a href="{{ url_for('shop.index', category='bags') }}">Bags</a></li>
+     <li><a href="{{ url_for('shop.index', category='belts') }}">Belts</a></li></ul></div>
+   <div><h4>Help</h4><ul>
+     <li><a href="{{ url_for('main.home') }}#how">How ordering works</a></li>
+     <li><a href="{{ url_for('main.delivery') }}">Delivery</a></li>
+     <li><a href="{{ url_for('auth.account') }}">My account</a></li></ul></div>
+   <div><h4>Contact</h4><ul>
+     <li><a href="https://wa.me/{{ wa_number }}" target="_blank" rel="noopener">WhatsApp</a></li>
+     {% if shop.instagram_url %}<li><a href="{{ shop.instagram_url }}" target="_blank" rel="noopener">Instagram</a></li>{% endif %}
+     {% if shop.tiktok_url %}<li><a href="{{ shop.tiktok_url }}" target="_blank" rel="noopener">TikTok</a></li>{% endif %}
+     {% if shop.facebook_url %}<li><a href="{{ shop.facebook_url }}" target="_blank" rel="noopener">Facebook</a></li>{% endif %}
+     {% if shop.x_url %}<li><a href="{{ shop.x_url }}" target="_blank" rel="noopener">X (Twitter)</a></li>{% endif %}
+   </ul></div>
+  </div>
+  <div class="copy">© 2026 SHEFz Signature. All rights reserved.</div>
+ </div>
+</footer>

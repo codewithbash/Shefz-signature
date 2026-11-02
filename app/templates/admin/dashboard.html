@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "components/badges.html" import order_badge, pay_badge %}
+{% block title %}Admin – SHEFz Signature{% endblock %}
+{% block content %}
+<main><section><div class="wrap">
+  <h2>Admin dashboard</h2>
+  {% include "admin/_nav.html" %}
+  <div class="stats">
+    <a class="panel stat" href="{{ url_for('admin.orders', status='pending') }}"><b>{{ new_orders }}</b><span class="muted">New orders</span></a>
+    <a class="panel stat" href="{{ url_for('admin.orders', payment='unpaid') }}"><b>{{ unpaid_orders }}</b><span class="muted">Unpaid</span></a>
+    <a class="panel stat" href="{{ url_for('admin.orders', status='in_production') }}"><b>{{ in_production }}</b><span class="muted">In production</span></a>
+    <div class="panel stat"><b>{{ product_count }}</b><span class="muted">Products</span></div>
+    <div class="panel stat"><b>{{ customer_count }}</b><span class="muted">Customers</span></div>
+  </div>
+  <h3 style="font-size:26px;margin-top:26px">Latest orders</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Payment</th><th></th></tr></thead>
+    <tbody>
+    {% for o in recent %}
+    <tr><td>{{ o.order_number }}</td><td>{{ o.customer_name }}</td><td>{{ o.total|naira }}</td>
+      <td>{{ order_badge(o) }}</td><td>{{ pay_badge(o) }}</td>
+      <td><a class="gl" href="{{ url_for('admin.order_detail', order_id=o.id) }}">Open</a></td></tr>
+    {% else %}<tr><td colspan="6" class="muted">No orders yet.</td></tr>{% endfor %}
+    </tbody></table></div>
+</div></section></main>
+{% endblock %}
